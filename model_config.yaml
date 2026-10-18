@@ -1,0 +1,54 @@
+# DGSMM configuration.
+# Values marked [PAPER] are stated in the manuscript.
+# Values marked [UNSPECIFIED] are NOT stated in the manuscript: replace them with the
+# values you actually used before releasing this repository.
+
+seed_file: part2_configs/seeds.json      # 10 seeds, one per independent run [PAPER: 10 runs]
+rules_file: part2_configs/clinical_rules.json
+
+data:
+  n_states: 5                 # [PAPER] five latent health states
+  max_len: 128                # [UNSPECIFIED] max events per trajectory (incl. <EOS>)
+  vocab_size: 512             # [UNSPECIFIED] incl. <pad>=0, <eos>=1
+  vital_bin_hours: 1          # [PAPER] hourly bins for vital signs
+  lab_bin_hours: 24           # [PAPER] daily bins for laboratory values
+  split: {train: 0.70, val: 0.15, test: 0.15}   # [PAPER: patient-level split; ~13,120 train patients]
+  split_seed: 2024            # [UNSPECIFIED]
+  cohort: {min_age: 18, min_icu_los_hours: 24, min_monitoring_hours: 48}   # [PAPER]
+  n_comorbidity_codes: 30     # [UNSPECIFIED] top-k ICD-10 3-character codes used as baseline features
+
+model:
+  latent_dim: 64              # [UNSPECIFIED]
+  embed_dim: 128              # [UNSPECIFIED]
+  encoder: {layers: 3, hidden: 256}                  # [PAPER] 3-layer MLP, 256 units
+  history_gru: {layers: 2, hidden: 128}              # [PAPER] 2-layer GRU, 128 units
+  duration_mdn_components: 5                         # [PAPER]
+  event_transformer: {heads: 8, layers: 2}           # [PAPER: 8 heads] layers [UNSPECIFIED]
+  discriminator: {conv_layers: 4, channels: 128, kernel: 5}   # [PAPER: 4-layer residual conv] rest [UNSPECIFIED]
+  dropout: 0.3                # [PAPER]
+
+loss:
+  lambda_adv: 0.1             # [UNSPECIFIED]
+  lambda_guideline: 0.01      # [UNSPECIFIED] paper: lambdas selected in 0.001-0.1
+  lambda_order: 0.01          # [UNSPECIFIED]
+  lambda_temporal: 0.05       # [UNSPECIFIED]
+  order_eps_hours: 0.1        # [UNSPECIFIED] tolerance epsilon in L_order
+
+train:
+  lr: 1.0e-4                  # [PAPER] Adam
+  weight_decay: 1.0e-5        # [PAPER]
+  epochs: 500                 # [PAPER] upper bound
+  early_stopping_patience: 15 # [UNSPECIFIED] early stopping on validation loss is [PAPER]
+  physical_batch_size: 16     # [PAPER]
+  accumulation_steps: 4       # [PAPER] effective (expected) batch size 64
+  gumbel_tau_start: 1.0       # [UNSPECIFIED] temperature annealing is [PAPER]
+  gumbel_tau_end: 0.5
+  device: cuda
+
+dp:
+  enabled: true
+  max_grad_norm: 1.0          # [PAPER] C = 1.0
+  noise_multiplier: 1.1       # [PAPER] sigma = 1.1
+  delta: 1.0e-5               # [PAPER]
+  accountant: rdp             # [PAPER] RDP accountant in Opacus
+  target_epsilon: 2.3         # [PAPER] training STOPS as soon as epsilon would exceed this

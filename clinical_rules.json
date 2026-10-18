@@ -1,0 +1,5 @@
+{
+  "_note": "TEMPLATE. Fill with the curated rule set reviewed by the clinical co-authors. Tokens are strings from the vocabulary built by preprocessing (see data/processed/artifacts.json).",
+  "guideline_forbidden_pairs": [],
+  "order_pairs_first_before_second": []
+}
