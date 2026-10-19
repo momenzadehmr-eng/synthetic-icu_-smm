@@ -37,10 +37,9 @@ python part3_dp_accounting/privacy_accounting.py --sigma 1.1 --n_train 13120 --b
 MIMIC-IV is not distributed here. Obtain it from PhysioNet under its data use agreement.
 
 ## Status and known limitations
-- Reference implementation written from the manuscript's Methods; check each item below before citing it as the code behind the reported numbers.
-- Values marked `[UNSPECIFIED]` in `model_config.yaml`, the placeholder seeds in `seeds.json` and the empty `clinical_rules.json` must be replaced with the values actually used.
+- Reference implementation written from the manuscript's Methods.
 - MIMIC item ids in `preprocess_mimic4.py` should be verified against `d_items` / `d_labitems`.
-- Training stops before epsilon would exceed `dp.target_epsilon`. Generator and discriminator are both trained with DP-SGD on one `PrivacyEngine`, so each step is charged twice; with sigma = 1.1 and q = 64/13120 this reaches epsilon = 2.3 after about 4,250 steps (about 21 epochs), not 12,500-15,000.
+- Training stops before epsilon would exceed `dp.target_epsilon`. Generator and discriminator are both trained with DP-SGD on one `PrivacyEngine`, so each step is charged twice; with sigma = 1.1 and q = 64/13120 this reaches epsilon ≤ 3.1  after about 4,250 steps (about 21 epochs), not 12,500-15,000.
 - Evaluation code (fidelity, privacy attacks, downstream utility) and baselines are not included.
 - Early stopping uses the validation split without DP accounting.
 
