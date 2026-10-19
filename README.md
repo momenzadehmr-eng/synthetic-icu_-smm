@@ -1,6 +1,6 @@
 # DGSMM: Deep Generative Semi-Markov Model for synthetic ICU patient trajectories
 
-Code accompanying the manuscript (anonymous repository for peer review). The package is organised as
+Code accompanying the manuscript. The package is organised as
 **one main code package and four supporting parts**.
 
 | Component | Folder | Contents |
@@ -26,7 +26,7 @@ bash part4_reproduction/run_all.sh /path/to/mimiciv/3.1
 Privacy accounting only (no GPU needed):
 
 ```bash
-python part3_dp_accounting/privacy_accounting.py --sigma 1.1 --n_train 13120 --batch 64 --steps 12500 15000 --target_eps 2.3
+python part3_dp_accounting/privacy_accounting.py --sigma 1.1 --n_train 13120 --batch 64 --steps 12500 15000 --target_epsε ≤ 3.1 
 ```
 
 ## Outputs
